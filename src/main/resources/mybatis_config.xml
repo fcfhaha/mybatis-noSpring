@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+  <!-- 指定属性配置的位置-->
+  <properties resource="jdbc.properties" />
+  
+   <settings>
+		<!-- 在插入数据的时候 如果出现空值的处理 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+  
+  <!-- 配置别名 -->
+  <typeAliases>   <!-- Conerstone 不支持 ,会找不到那个配置别名的类-->
+  	<!-- 定义别名 name:实体类所在的包名 -->
+  	<!-- <package name="com.test.mybatis.entity"/> -->
+  </typeAliases>
+  
+  <!-- default用来指定当前mybatis框架使用的环境是哪个 -->
+  <environments default="cpk">
+     <environment id="cpk">
+     	<transactionManager type="JDBC" />
+	     	<dataSource type="POOLED">
+		     	  <property name="driver" value="${jdbc.driver}"/>
+				  <property name="url" value="${jdbc.url}"/>
+				  <property name="username" value="${jdbc.user}"/>
+				  <property name="password" value="${jdbc.pass}"/>
+				  <property name="poolMaximumActiveConnections" value="${poolMaximumActiveConnections}"/>  
+				  <property name="poolMaximumCheckoutTime" value="${poolMaximumCheckoutTime}"/>  
+				  <property name="poolMaximumIdleConnections" value="${poolMaximumIdleConnections}"/>  
+				  <property name="driver.encode" value="${driver.encode}"/>  
+	     	</dataSource>  
+     </environment>
+  </environments> 
+  <!-- 2)配置sql映射文件 -->
+  <mappers>
+    <!-- resource指定配置的目录。***对conerstone而言,必须放在项目的根目录下, 放在其他地方,rebuild meu的时候会打的jar包会不包括这些配置文件,从而导致找不到 -->
+    <mapper resource="userMapper.xml" />
+  
+  </mappers>
+
+</configuration>
+
+

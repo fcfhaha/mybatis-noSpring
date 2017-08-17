@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.delta.mainline.cpk.dao.IUserDao">
+
+ <!--****************  插入  ******************--> 
+ <!-- 单个或是批量插入数据 -->
+   <insert id="insert" >
+    	insert into user(name,age) values(#{name},#{age})
+    	
+    	<selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+    			select LAST_INSERT_ID()
+    	</selectKey>
+    </insert>
+  
+ <!--****************  修改  ******************--> 
+    
+ <!--根据map条件修改数据 -->
+	<update id="updateByMapConditions" >
+		update user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="setValue.name !=null">name=#{setValue.name},</if>
+			<if test="setValue.age >0"> age=#{setValue.age},</if>
+		</trim>
+		
+		WHERE 1=1 
+			and name = #{condition.name}   <!-- 不用if判断,防止无条件全部更新 -->
+	</update>
+	
+<!--根据id修改数据 -->
+	<update id="updateByPrimary" >
+		update user
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name !=null">name=#{name},</if>
+			<if test="age >0"> age=#{age},</if>
+		</trim>
+		WHERE id=#{id}
+	</update>
+	
+
+ <!--****************  查询  ******************-->
+ 
+<!-- 查询 :查询条件封装成一个实体类--> 
+	<select id="selectByEs" resultType="User">
+		select * from user where 1= 1
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="age >0 ">
+			and age = #{age}
+		</if>
+		 order by id desc 
+	</select>
+	
+<!-- 查询 :查询条件封装成一个map--> 
+	<select id="selectByMapConditions" resultType="User">
+		select * from user where 1= 1
+		<if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="age >0 ">
+			and age = #{age}
+		</if>
+		 order by id desc 
+	</select>
+
+<!-- 查询 :查询条件为主键id--> 
+	<select id="selectByPrimary" resultType="User">
+		select * from user where id = #{id}
+		 order by id desc 
+	</select>
+	
+<!-- 查询 :条件分页查询--> 
+	<select id="selectByPageCondition" resultType="User">
+		select * from user where 1=1
+		<if test="condition.name != null and condition.name  != ''">
+			and name = #{condition.name}
+		</if>
+		<if test="condition.age >0 ">
+			and age = #{condition.age}
+		</if>
+		 order by id desc 
+		 limit #{offset},#{pagesize}
+	</select>
+	
+	<!-- 查询 :查询所有--> 
+	<select id="selectAll" resultType="User">
+		select * from user 
+		 order by id desc 
+	</select>
+	
+	
+	<!--****************  统计  ******************-->
+	
+	<!-- 统计 :统计满足条件(map)的数量--> 
+	<select id="countByMapConditions" resultType="long">
+		select count(1) from user where 1=1
+		 <if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="age >0 ">
+			and age = #{age}
+		</if>
+	</select>
+	
+	<!-- 统计 :统计满足条件(entity)的数量--> 
+	<select id="countByE" resultType="long">
+		select count(1) from user where 1=1
+		 <if test="name != null and name != ''">
+			and name = #{name}
+		</if>
+		<if test="age >0 ">
+			and age = #{age}
+		</if>
+	</select>
+	
+	
+	
+	<!--****************  删除  ******************-->
+	
+	<!-- 根据条件(map) 删除 -->
+	<delete id="deleteByMapContitions">
+		delete from user where 1=1
+		and name=#{name}   <!-- 不用if判断,防止无条件全部删除 -->
+		and age =#{age}
+	</delete>
+	
+	<!-- 根据条件(Entity) 删除 -->
+	<delete id="deleteByE">
+		delete from user where 1=1
+		and name=#{name} 
+		and age =#{age}
+	</delete>
+	
+	<!-- 根据条件(id) 删除 -->
+	<delete id="deleteByPrimary">
+		delete from user where 1=1
+		and id=#{id} 
+		
+	</delete>
+	
+</mapper>
+
+
